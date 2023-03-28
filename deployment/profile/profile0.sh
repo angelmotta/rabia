@@ -171,12 +171,13 @@ load_variables_p1() {
         RC_Peers+=(${SvrIp}":"${NPort})
     done
 
-    # echo ${SvrIps[@]}
-    # echo ${SvrPPorts[@]}
-    # echo ${SvrNPorts[@]}
-    # echo ${RC_Peers[@]}
-    # echo ${RC_Proxies[@]}
-    # echo ${CliIps[@]}
+    echo "load_variables_p1:"
+    echo ${SvrIps[@]}
+    echo ${SvrPPorts[@]}
+    echo ${SvrNPorts[@]}
+    echo ${RC_Peers[@]}
+    echo ${RC_Proxies[@]}
+    echo ${CliIps[@]}
 }
 
 # loads Rabia_ClientsPerServer
@@ -208,8 +209,10 @@ load_variables_p2() {
             fi
         done
     fi
-    # echo ${Rabia_ClientDistributingMethod} "method for distrubting clients"
-    # echo "num of clients taken by each server = "${Rabia_ClientsPerServer[*]}
+
+    echo "load_variables_p2:"
+    echo ${Rabia_ClientDistributingMethod} "method for distrubting clients"
+    echo "num of clients taken by each server = "${Rabia_ClientsPerServer[*]}
 }
 
 # export 12 variables for go programs

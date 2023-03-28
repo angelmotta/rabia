@@ -15,6 +15,7 @@
 END
 single_start_servers() {
   for idx in $(seq 0 $(($NServers - 1))); do
+    echo RC_Role=svr RC_Index=${idx} RC_SvrIp=${SvrIps[$idx]} RC_PPort=${SvrPPorts[$idx]} RC_NPort=${SvrNPorts[$idx]} RC_Peers=${RC_Peers[@]}
     RC_Role=svr RC_Index=${idx} RC_SvrIp=${SvrIps[$idx]} RC_PPort=${SvrPPorts[$idx]} RC_NPort=${SvrNPorts[$idx]} RC_Peers=${RC_Peers[@]} ${RCFolder}/rabia &
   done
 }
@@ -23,6 +24,7 @@ single_start_clients() {
   for idx in $(seq 0 $(($NClients - 1))); do
     find_proxy_idx ${idx}
     proxy_idx=$?
+    echo RC_Role=cli RC_Index=${idx} RC_Proxy=${RC_Proxies[$proxy_idx]}
     RC_Role=cli RC_Index=${idx} RC_Proxy=${RC_Proxies[$proxy_idx]} ${RCFolder}/rabia &
   done
 }

@@ -45,7 +45,7 @@ func (p *Proxy) redisExecuteCmd(cmd string) string {
 		}
 		return "0" + key + "ok"
 	} else { // read
-		v, err := p.RedisClient.Get(p.RedisCtx, "key2").Result()
+		v, err := p.RedisClient.Get(p.RedisCtx, "usd_pen_").Result()
 		if err == redis.Nil {
 			return "1" + key
 		} else if err != nil {

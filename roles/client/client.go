@@ -140,7 +140,7 @@ func (c *Client) CloseLoopClient() {
 	ticker := time.NewTicker(Conf.ClientTimeout)
 MainLoop:
 	for i := 0; i < Conf.NClientRequests/Conf.ClientBatchSize; i++ {
-		c.sendOneRequest(i)
+		c.mySendOneRequest(i)
 		select {
 		case rep := <-c.TCP.RecvChan:
 			c.processOneReply(rep)
@@ -195,6 +195,29 @@ func (c *Client) sendOneRequest(i int) {
 		val := fmt.Sprintf("%d%v%v", c.Rand.Intn(2),
 			rstring.RandString(c.Rand, Conf.KeyLen),
 			rstring.RandString(c.Rand, Conf.ValLen))
+		obj.Commands[j] = val
+	}
+
+	time.Sleep(time.Duration(Conf.ClientThinkTime) * time.Millisecond)
+
+	c.CommandLog[i].SendTime = time.Now()
+	c.TCP.SendChan <- obj
+	c.SentSoFar += Conf.ClientBatchSize
+}
+
+/*
+	Sends a single request.
+	val is a string of 17 bytes (modifiable through Conf.KeyLen and Conf.ValLen)
+	[0:1]   (1 byte): "0" == a write operation,  "1" == a read operation
+	[1:9]  (8 bytes): a string Key
+	[9:17] (8 bytes): a string Value
+*/
+func (c *Client) mySendOneRequest(i int) {
+	obj := Command{CliId: c.ClientId, CliSeq: uint32(i), Commands: make([]string, Conf.ClientBatchSize)}
+	for j := 0; j < Conf.ClientBatchSize; j++ {
+		val := fmt.Sprintf("%d%v%v", c.Rand.Intn(2),
+			"usd_pen_",
+			rstring.RandPriceString(c.Rand, Conf.ValLen))
 		obj.Commands[j] = val
 	}
 

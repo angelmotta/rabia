@@ -108,9 +108,9 @@ NClientRequests:      if set to 0, then it becomes the default value 10000000 --
 END
 
 # Section 1. user configurations - type 1 (see comments above for their meanings)
-ServerIps=(localhost)
-ClientIps=(localhost)
-Controller=localhost:8070
+ServerIps=(192.168.100.11 192.168.100.12 192.168.100.13)
+ClientIps=(192.168.100.14 192.168.100.15)
+Controller=192.168.100.11:8070
 ProxyStartPort=18080
 NetworkStartPort=28080
 
@@ -126,7 +126,7 @@ Rabia_ClientsPerServer=(1 0 0)
 
 NServers=3
 NFaulty=1
-NClients=1
+NClients=2
 NConcurrency=1
 ClientTimeout=20
 ClientThinkTime=0
@@ -280,11 +280,13 @@ start_servers_on_a_machine() {
 }
 
 start_clients_on_a_machine() {
+    echo "start_clients_on_a_machine()"
     for idx in $(seq 0 $(($NClients - 1))); do
         ip_idx=$((idx % ${#ClientIps[@]}))
         if [[ ${ip_idx} -eq ${RCMachineIdx} ]]; then
             find_proxy_idx ${idx}
             proxy_idx=$?
+            echo "RC_Role=cli RC_Index=${idx} RC_Proxy=${RC_Proxies[$proxy_idx]} ${RCFolder}/rabia &"
             RC_Role=cli RC_Index=${idx} RC_Proxy=${RC_Proxies[$proxy_idx]} ${RCFolder}/rabia &
         fi
     done

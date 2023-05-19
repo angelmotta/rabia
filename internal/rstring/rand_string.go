@@ -27,6 +27,7 @@ package rstring
 
 import (
 	"math/rand"
+	"strconv"
 	"unsafe"
 )
 
@@ -62,4 +63,18 @@ func RandString(src *rand.Rand, n int) string {
 	}
 
 	return *(*string)(unsafe.Pointer(&b))
+}
+
+func RandPriceString(src *rand.Rand, n int) string {
+	min := 3708
+	max := 3910
+	// Generate Random
+	//valCurrency := float64(rand.Intn(max-min)+min) / 1000
+	valCurrency := float64(src.Intn(max-min)+min) / 1000
+	valPrice := strconv.FormatFloat(valCurrency, 'f', 6, 64)
+	if len(valPrice) != n {
+		//log.Panicf("got error creating random price value %v in ExchangeStore: this length is not %v bytes", valPrice, n)
+		panic("got error creating random price value in ExchangeStore: this length is not 8 bytes")
+	}
+	return valPrice
 }

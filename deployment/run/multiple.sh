@@ -29,6 +29,8 @@ start_clients() {
   MachineIdx=0
   for ip in "${ClientIps[@]}"; do
     if [ $# -eq 0 ]; then
+      echo "start_clients()"
+      echo "ssh -o StrictHostKeyChecking=no -i ${key} ${User}@${ip} . ${RCFolder}/deployment/profile/profile0.sh && load_variables && RCMachineIdx=${MachineIdx} start_clients_on_a_machine"
       ssh -o StrictHostKeyChecking=no -i ${key} "${User}"@"${ip}" ". ${RCFolder}/deployment/profile/profile0.sh && load_variables && RCMachineIdx=${MachineIdx} start_clients_on_a_machine" 2>&1 &
     else
       ssh -o StrictHostKeyChecking=no -i ${key} "${User}"@"${ip}" ". ${RCFolder}/deployment/profile/profile0.sh && . ${1} && load_variables && RCMachineIdx=${MachineIdx} start_clients_on_a_machine" 2>&1 &
